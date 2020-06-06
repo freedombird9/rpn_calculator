@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class App {
 
     public static void main(String[] args) {
-        CalculatorServiceImpl calculatorService = new CalculatorServiceImpl();
+        CalculatorService calculatorService = new CalculatorServiceImpl();
         Scanner scanner = new Scanner(System.in);
 
         while (true) {

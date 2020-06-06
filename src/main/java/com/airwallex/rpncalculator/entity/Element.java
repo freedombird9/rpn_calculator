@@ -2,6 +2,7 @@ package com.airwallex.rpncalculator.entity;
 
 import com.airwallex.rpncalculator.enums.Control;
 import com.airwallex.rpncalculator.enums.Operator;
+import com.airwallex.rpncalculator.enums.Type;
 import com.airwallex.rpncalculator.exception.InsufficientParametersException;
 import com.airwallex.rpncalculator.exception.UnknownOperatorException;
 import com.airwallex.rpncalculator.formatter.PrettyPrint;
@@ -36,13 +37,15 @@ public class Element {
     @Setter
     private Element child2;
 
+    private Double evalCache = null;
+
     private Element() {}
 
     public static class ElementFactory {
         private static final Deque<Element> operationLog = new ArrayDeque<>();
         private static final Deque<String> evalStack = new ArrayDeque<>();
 
-        public Element create(String token) throws InsufficientParametersException {
+        public void create(String token) throws InsufficientParametersException {
             Element element = new Element();
 
             element.setToken(token);
@@ -78,7 +81,6 @@ public class Element {
                 throw new IllegalArgumentException("Invalid token: " + token);
             }
 
-            return element;
         }
 
         public Deque<String> evaluateElements() {
@@ -97,6 +99,10 @@ public class Element {
             }
 
             return evalStack;
+        }
+
+        public void reset() {
+            operationLog.clear();
         }
 
         private void buildExpression(Element element) throws InsufficientParametersException {
@@ -121,6 +127,11 @@ public class Element {
                     throw new InsufficientParametersException(operator);
                 }
 
+                if (Operator.DIVIDE.equals(operator) && prevElement1.evaluate() == 0) {
+                    operationLog.push(prevElement1);
+                    throw new ArithmeticException("/ 0");
+                }
+
                 element.setChild1(operationLog.pop());
                 element.setChild2(prevElement1);
             }
@@ -128,27 +139,40 @@ public class Element {
     }
 
     private double evaluate() {
+        if (evalCache != null) {
+            return evalCache;
+        }
+
         if (Type.OPERAND.equals(type)) {
-            return Double.parseDouble(token);
+            evalCache = Double.parseDouble(token);
+            return evalCache;
         }
         if (Type.CONTROL.equals(type)) {
             throw new UnsupportedOperationException("Control cannot be evaluated");
         }
+
         // Expression
         Operator operator = Operator.parseOperator(token);
         switch (operator) {
             case SQRT:
-                return Math.sqrt((child1.evaluate()));
+                evalCache = Math.sqrt((child1.evaluate()));
+                break;
             case PLUS:
-                return child1.evaluate() + child2.evaluate();
+                evalCache = child1.evaluate() + child2.evaluate();
+                break;
             case MINUS:
-                return child1.evaluate() - child2.evaluate();
+                evalCache = child1.evaluate() - child2.evaluate();
+                break;
             case MULTIPLY:
-                return child1.evaluate() * child2.evaluate();
+                evalCache = child1.evaluate() * child2.evaluate();
+                break;
             case DIVIDE:
-                return child1.evaluate() / child2.evaluate();
+                evalCache = child1.evaluate() / child2.evaluate();
+                break;
             default:
                 throw new UnknownOperatorException("Unknown operator: " + token);
         }
+
+        return evalCache;
     }
 }

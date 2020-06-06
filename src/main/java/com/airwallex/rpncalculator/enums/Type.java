@@ -1,4 +1,4 @@
-package com.airwallex.rpncalculator.entity;
+package com.airwallex.rpncalculator.enums;
 
 /**
  * Data types the calculator
@@ -11,5 +11,5 @@ package com.airwallex.rpncalculator.entity;
 public enum Type {
     OPERAND,
     ARITHMETIC_EXPRESSION,
-    CONTROL;
+    CONTROL
 }

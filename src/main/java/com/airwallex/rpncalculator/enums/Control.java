@@ -1,7 +1,5 @@
 package com.airwallex.rpncalculator.enums;
 
-import com.airwallex.rpncalculator.entity.Expression;
-import com.airwallex.rpncalculator.entity.Type;
 import com.airwallex.rpncalculator.exception.UnknownOperatorException;
 import org.apache.commons.lang3.StringUtils;
 
@@ -12,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
  * @date 2020/6/02 11:41
  * @since V1.0
  */
-public enum Control implements Expression {
+public enum Control {
     UNDO("undo"),
     CLEAR("clear");
 
@@ -24,16 +22,6 @@ public enum Control implements Expression {
 
     public String getValue() {
         return description;
-    }
-
-    @Override
-    public double evaluate() {
-        throw new UnsupportedOperationException("Control cannot be evaluated");
-    }
-
-    @Override
-    public Type getType() {
-        return Type.CONTROL;
     }
 
     public static boolean isControl(String c) {
