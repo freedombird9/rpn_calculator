@@ -52,6 +52,11 @@ public class CalculatorServiceTest {
         Deque<String> evalStack = calculatorService.getElementFactory().evaluateElements();
         Assert.assertEquals(4, evalStack.size());
         Assert.assertEquals("0", evalStack.peek());
+
+        calculatorService.run("-2 sqrt");
+        evalStack = calculatorService.getElementFactory().evaluateElements();
+        Assert.assertEquals(5, evalStack.size());
+        Assert.assertEquals("-2", evalStack.peek());
     }
 
     @Test

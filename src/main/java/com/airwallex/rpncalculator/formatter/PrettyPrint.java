@@ -1,5 +1,7 @@
 package com.airwallex.rpncalculator.formatter;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
@@ -22,4 +24,11 @@ public class PrettyPrint {
     public static String format(double d) {
         return df.format(d);
     }
+
+    public static void main(String[] args) {
+        int in = Integer.parseInt("99999999999999999999999999999999999999999999999999999999999999999999999");
+
+        System.out.println(in);
+    }
+
 }

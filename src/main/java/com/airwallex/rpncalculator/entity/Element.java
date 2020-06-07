@@ -78,7 +78,7 @@ public class Element {
                         operationLog.push(element);
                 }
             } else {
-                throw new IllegalArgumentException("Invalid token: " + token);
+                throw new IllegalArgumentException("Invalid input: " + token);
             }
 
         }
@@ -105,15 +105,23 @@ public class Element {
             operationLog.clear();
         }
 
-        private void buildExpression(Element element) throws InsufficientParametersException {
-            element.setType(Type.ARITHMETIC_EXPRESSION);
-            Operator operator = Operator.parseOperator(element.getToken());
-
-            // Validate first expression
+        private void validateExpression(Operator operator) throws InsufficientParametersException {
             if (operationLog.peek() == null
                     || Control.isControl(operationLog.peek().getToken())) {
                 throw new InsufficientParametersException(operator);
             }
+
+            if (Operator.SQRT.equals(operator) && operationLog.peek().evaluate() < 0) {
+                throw new ArithmeticException("sqrt on negative number");
+            }
+        }
+
+        private void buildExpression(Element element) throws InsufficientParametersException {
+            element.setType(Type.ARITHMETIC_EXPRESSION);
+            Operator operator = Operator.parseOperator(element.getToken());
+
+            validateExpression(operator);
+
             Element prevElement1 = operationLog.pop();
             element.setChild1(prevElement1);
 

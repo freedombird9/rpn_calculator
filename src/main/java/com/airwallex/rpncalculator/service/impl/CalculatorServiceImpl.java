@@ -45,9 +45,9 @@ public class CalculatorServiceImpl implements CalculatorService {
                     , e.getOperator().getValue()
                     , e.getPosition());
         } catch (IllegalArgumentException e) {
-            log.warn("Invalid input: {}", input, e);
+            log.warn("Input: {}, error: {}", input, e.getMessage());
         } catch (ArithmeticException e) {
-            log.warn("Illegal arithmetic, input: {}", input, e);
+            log.warn("Illegal arithmetic, input: {}, error: {}", input, e.getMessage());
         } catch (Exception e) {
             log.error("Unknown error, input: {}", input, e);
         }
