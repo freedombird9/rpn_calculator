@@ -17,13 +17,13 @@
 
     <!-- All logs -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/gosnow.log</file>
+        <file>logs/rpncalculator.log</file>
         <encoder>
             <pattern>${log_pattern}</pattern>
             <charset>UTF-8</charset>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/gosnow.%d{yyyy-MM-dd}.log
+            <fileNamePattern>logs/rpncalculator.%d{yyyy-MM-dd}.log
             </fileNamePattern>
             <maxHistory>10</maxHistory>
             <totalSizeCap>5GB</totalSizeCap>
